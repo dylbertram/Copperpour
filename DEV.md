@@ -124,6 +124,9 @@ no item CRUD.
   journals holding full before/after images — sensitive project data. Unix creates them
   `0600` regardless of umask; elsewhere keep the project directory private. Journals
   named `.konnect-transaction-*.json` by earlier releases are still recovered.
+  `FileTransition::guard` holds a file the change was planned from without writing it:
+  locked, checked at commit and journaled with equal images, so a guard edited after a
+  crash shows as divergent and stops recovery instead of completing a stale plan.
 - New design files and exports get `0666 & ~umask` on Unix. A replacement keeps the
   destination's mode, so a project an earlier Konnect created stays `0600` until
   `chmod`ed.
